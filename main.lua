@@ -4,7 +4,8 @@ function love.load()
     car_height = 170
     car_angle = 0
     car_rotation = 0.05
-    car_speed = 5
+    car_accel = 0.15
+    car_speed = 0
     car_x = 300
     car_y = 300
 
@@ -27,7 +28,7 @@ function move(speed)
     new_y = car_y - math.cos(car_angle) * speed
 
     if collision(new_x, new_y) then
-        return
+        car_speed = 0
     else
         car_x = new_x
         car_y = new_y
@@ -57,9 +58,14 @@ function love.draw()
 
     -- Speed
     if love.keyboard.isDown('up') then
+        car_speed = car_speed + car_accel
         move(car_speed)
     elseif love.keyboard.isDown('down') then
-        move(-car_speed)
+        car_speed = car_speed - car_accel
+        move(car_speed)
+    else
+        car_speed = car_speed * 0.95
+        move(car_speed)
     end
     love.graphics.draw(car, car_x, car_y, car_angle, 1, 1, car_width/2, car_height/2)
 end
