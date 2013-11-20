@@ -32,16 +32,17 @@ function move(speed)
     new_y = car_y - math.cos(car_angle) * speed
 
     if collision(new_x, new_y) then
-        car_speed = 0
+        -- gradually reduce speed
+        car_speed = car_speed * 0.5
     else
         car_x = new_x
         car_y = new_y
     end
 end
 
--- this doesn't really work with non-square objects...
+-- pretend it is square (only the front and back really matters anyway)
 function collision(x, y)
-    if x - car_width/2 < 0 or x + car_width/2 > screen_width then
+    if x - car_height/2 < 0 or x + car_height/2 > screen_width then
         return true
     end
 
