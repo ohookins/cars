@@ -1,5 +1,9 @@
 function love.load()
     car = love.graphics.newImage("car.png")
+    engine = love.audio.newSource("engine.ogg", "static")
+    engine:setLooping(true)
+    engine:setVolume(0.3)
+    love.audio.play(engine)
     car_width = 100
     car_height = 170
     car_angle = 0
@@ -67,5 +71,16 @@ function love.draw()
         car_speed = car_speed * 0.95
         move(car_speed)
     end
+
+    -- Engine noise
+    if car_speed ~= 0 then
+        engine:setPitch(1 + math.abs(car_speed) * 0.1)
+        engine:setVolume(0.4)
+    else
+        engine:setPitch(1)
+        engine:setVolume(0.3)
+    end
+
+    -- Draw the car
     love.graphics.draw(car, car_x, car_y, car_angle, 1, 1, car_width/2, car_height/2)
 end
