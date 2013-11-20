@@ -17,16 +17,6 @@ function love.load()
     screen_height = love.graphics.getHeight()
 end
 
---[[
-function love.keypressed(key, unicode)
-    if key == 'left' then
-        car_angle = car_angle - car_rotation
-    elseif key == 'right' then
-        car_angle = car_angle + car_rotation
-    end
-end
-]]--
-
 function move(speed)
     new_x = car_x + math.sin(car_angle) * speed
     new_y = car_y - math.cos(car_angle) * speed
@@ -56,20 +46,31 @@ end
 function love.draw()
     -- Steering
     if love.keyboard.isDown('left') then
-        car_angle = car_angle - car_rotation
+        if car_speed >= 0 then
+            car_angle = car_angle - car_rotation
+        else
+            car_angle = car_angle + car_rotation
+        end
     elseif love.keyboard.isDown('right') then
-        car_angle = car_angle + car_rotation
+        if car_speed >= 0 then
+            car_angle = car_angle + car_rotation
+        else
+            car_angle = car_angle - car_rotation
+        end
     end
 
     -- Speed
-    if love.keyboard.isDown('up') then
+    if love.keyboard.isDown(' ') then
+        car_speed = car_speed * 0.85
+        move(car_speed)
+    elseif love.keyboard.isDown('up') then
         car_speed = car_speed + car_accel
         move(car_speed)
     elseif love.keyboard.isDown('down') then
         car_speed = car_speed - car_accel
         move(car_speed)
     else
-        car_speed = car_speed * 0.95
+        car_speed = car_speed * 0.99
         move(car_speed)
     end
 
